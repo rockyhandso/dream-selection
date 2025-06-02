@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricket Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      color: #222;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .output {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cricket Simulation Engine</h1>
+
+  <form id="simulationForm">
+    <label for="batsman">Batsman Name:</label>
+    <input type="text" id="batsman" name="batsman" required />
+
+    <label for="bowlers">Bowlers (comma-separated):</label>
+    <textarea id="bowlers" name="bowlers" rows="3" required></textarea>
+
+    <label for="venue">Venue:</label>
+    <input type="text" id="venue" name="venue" value="Wankkade Stadium" />
+
+    <label for="pitch">Pitch Type:</label>
+    <select id="pitch" name="pitch">
+      <option value="red soil">Red Soil</option>
+      <option value="red black soil">Red Black Soil</option>
+      <!--<option value="black soil">Black Soil</option>
+      <option value="batting friendly">Batting Friendly</option>
+      <option value="bowler friendly">Bowler Friendly</option>-->
+    </select>
+
+    <label for="innings">Innings:</label>
+    <select id="innings" name="innings">
+      <option value="1">1st</option>
+      <option value="2">2nd</option>
+    </select>
+
+    <button type="submit">Simulate</button>
+  </form>
+
+  <div class="output" id="result">
+    <!-- Prediction output will appear here -->
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('simulationForm');
+      const resultBox = document.getElementById('result');
+  
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+  
+        const batsman = document.getElementById('batsman').value.trim();
+        const bowlersText = document.getElementById('bowlers').value.trim();
+        const venue = document.getElementById('venue').value.trim();
+        const pitch = document.getElementById('pitch').value;
+        const innings = document.getElementById('innings').value;
+  
+        if (!batsman || !bowlersText) {
+          resultBox.innerHTML = `<p style="color:red;">Please enter all required fields.</p>`;
+          return;
+        }
+  
+        const bowlers = bowlersText.split(',').map(b => b.trim()).filter(b => b);
+        if (bowlers.length === 0) {
+          resultBox.innerHTML = `<p style="color:red;">Please enter at least one bowler.</p>`;
+          return;
+        }
+  
+        fetch('/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            batsman,
+            bowlers,
+            venue,
+            pitch,
+            innings
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.error) {
+              resultBox.innerHTML = `<p style="color:red;">${data.error}</p>`;
+            } else if (data.status === 'Not out') {
+              resultBox.innerHTML = `<p><strong>${data.batsman}</strong> is predicted to remain <strong>Not Out</strong>.</p>`;
+            } else {
+              resultBox.innerHTML = `
+                <h3>Simulation Result</h3>
+                <p><strong>${data.batsman}</strong> is predicted to be dismissed in <strong>over ${data.over}</strong> by <strong>${data.dismissed_by}</strong>.</p>
+                <p>Venue: ${venue}, Pitch: ${pitch}, Innings: ${innings}</p>
+              `;
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            resultBox.innerHTML = `<p style="color:red;">Server error occurred. Please try again.</p>`;
+          });
+      });
+    })();
+  </script>
+  </body>
+</html>
