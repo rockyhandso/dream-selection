@@ -63,6 +63,9 @@ def predict():
 
         batsman = data.get("batsman").lower()
         bowlers = [b.lower() for b in data.get("bowlers", [])]
+        if not bowlers:
+            logger.warning("Bowlers list is empty")
+            return jsonify({"error": "bowlers list must contain at leat one bowler"}), 400
         venue = data.get("venue").lower()
         pitch = data.get("pitch").lower()
         try:
@@ -79,7 +82,8 @@ def predict():
 
         # Simulate over-wise prediction
         for over in range(1, 21):
-            bowler = bowlers[over % len(bowlers)]
+           # Cycle through bowlers starting with the first bowler for over 1
+            bowler = bowlers[(over - 1) % len(bowlers)]
             row = {
                 "over": over,
                 "bowler": bowler,
