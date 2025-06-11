@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cricket Simulation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="/">Cricket Simulation</a>
+      <div class="navbar-nav">
+        <a class="nav-link" href="/">Batsman Prediction</a>
+        <a class="nav-link" href="/wicket-count">Wicket Count Prediction</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Cricket Simulation Engine</h1>
+
+    <form id="simulationForm">
+      <label for="batsman">Batsman Name:</label>
+      <input type="text" id="batsman" name="batsman" required />
+
+      <label for="bowlers">Bowlers (comma-separated):</label>
+      <textarea id="bowlers" name="bowlers" rows="3" required></textarea>
+
+      <label for="venue">Venue:</label>
+      <input type="text" id="venue" name="venue" value="Wankkade Stadium" />
+
+      <label for="pitch">Pitch Type:</label>
+      <select id="pitch" name="pitch">
+        <option value="red soil">Red Soil</option>
+        <option value="red black soil">Red Black Soil</option>
+      </select>
+
+      <label for="innings">Innings:</label>
+      <select id="innings" name="innings">
+        <option value="1">1st</option>
+        <option value="2">2nd</option>
+      </select>
+
+      <button type="submit">Simulate</button>
+    </form>
+
+    <div class="output" id="result">
+      <!-- Prediction output will appear here -->
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
