@@ -5,10 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        // Get all batsmen inputs
+        const batsmen = [];
+        for (let i = 1; i <= 10; i++) {
+            const batsmanSelect = form.querySelector(`select[name="batsman${i}"]`);
+            if (batsmanSelect && batsmanSelect.value.trim()) {
+                batsmen.push(batsmanSelect.value.trim());
+            }
+        }
+
         // Get form data
         const formData = {
             bowler: document.getElementById('bowler').value,
-            batsmen: document.getElementById('batsmen').value.split(',').map(name => name.trim()),
+            batsmen: batsmen,
             venue: document.getElementById('venue').value,
             pitch: document.getElementById('pitch').value,
             innings: document.getElementById('innings').value,
@@ -49,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             resultDiv.innerHTML = `
                 <div class="alert alert-danger">
-                    Error: ${error.message}
+                    <h4>Error</h4>
+                    <p>${error.message}</p>
                 </div>
             `;
         }
