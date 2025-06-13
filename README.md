@@ -18,4 +18,4 @@ Start the Flask app with:
 python app.py
 ```
 
-This launches a local web server. Visit `http://localhost:5000` in your browser to access the simple interface in `templates/index.html`.
+Your browser to access the simple interface in `templates/index.html`.
