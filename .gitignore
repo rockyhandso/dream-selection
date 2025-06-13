@@ -1,2 +1,9 @@
 pvenv
 bowler wise performance.csv
+wicket_count_model.py
+.vscode
+__pycache__
+original code
+bowler_type.py
+check_model_version.py
+retrain_models.py

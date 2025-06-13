@@ -41,9 +41,9 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:\n", classification_report(y_test, y_pred))
 
 # Step 8: Model ko save karna (pickle file)
-joblib.dump(rf_model, 'model/wicket_count_model.pkl')
+joblib.dump(rf_model, 'model/wicket_count_model.joblib')
 
 # Optional: Label encoders ko bhi save karna
-joblib.dump(label_encoders, 'model/wicket_count_label_encoders.pkl')
+joblib.dump(label_encoders, 'model/wicket_count_label_encoders.joblib')
 
 print("Model aur label encoders pickle files me save kar diye gaye hain.")
